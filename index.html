@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Discord Bot Controller | Ultimate Server Destroyer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <div class="container">
+        <!-- header -->
+        <div class="header">
+            <div class="glitch" data-text="DISCORD CONTROLLER">DISCORD CONTROLLER</div>
+            <div class="subtitle">ULTIMATE SERVER DESTROYER v4.0</div>
+            <div class="badge">
+                <i class="fas fa-skull"></i> BLACK HAT TOOL <i class="fas fa-skull"></i>
+            </div>
+        </div>
+
+        <!-- token input section -->
+        <div class="card token-card">
+            <div class="card-header">
+                <i class="fas fa-key"></i> AUTHENTICATION
+                <span class="card-badge">REQUIRED</span>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <input type="password" id="botToken" placeholder="Enter Discord Bot Token" class="token-input">
+                    <button id="connectBtn" class="btn-primary">
+                        <i class="fas fa-plug"></i> CONNECT & SYNC
+                    </button>
+                </div>
+                <div id="statusMsg" class="status-message"></div>
+                <div class="info-text">
+                    <i class="fas fa-shield-alt"></i> Token is stored locally | All commands are destructive
+                </div>
+            </div>
+        </div>
+
+        <!-- stats dashboard -->
+        <div class="stats-grid" id="statsPanel" style="display: none;">
+            <div class="stat-card">
+                <i class="fas fa-server"></i>
+                <div class="stat-value" id="guildCount">0</div>
+                <div class="stat-label">SERVERS</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="stat-value" id="userCount">0</div>
+                <div class="stat-label">USERS</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-hashtag"></i>
+                <div class="stat-value" id="channelCount">0</div>
+                <div class="stat-label">CHANNELS</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-robot"></i>
+                <div class="stat-value" id="botName">-</div>
+                <div class="stat-label">BOT NAME</div>
+            </div>
+        </div>
+
+        <!-- commands tabs -->
+        <div class="card commands-card" id="commandsPanel" style="display: none;">
+            <div class="card-header">
+                <i class="fas fa-terminal"></i> DESTRUCTION COMMANDS
+                <span class="card-badge danger">USE WITH CAUTION</span>
+            </div>
+            
+            <div class="tab-container">
+                <button class="tab-btn active" data-tab="server">🏰 SERVER</button>
+                <button class="tab-btn" data-tab="channel">📢 CHANNELS</button>
+                <button class="tab-btn" data-tab="role">👑 ROLES</button>
+                <button class="tab-btn" data-tab="member">👥 MEMBERS</button>
+                <button class="tab-btn" data-tab="spam">💬 SPAM</button>
+                <button class="tab-btn" data-tab="nuke">💀 NUKE</button>
+            </div>
+
+            <!-- Server Commands Tab -->
+            <div class="tab-content active" id="server-tab">
+                <div class="command-group">
+                    <h3><i class="fas fa-crown"></i> Server Control</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/server delete</code>
+                                <span>Delete current server (requires owner perms)</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="deleteServer">EXECUTE</button>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/server rename &lt;name&gt;</code>
+                                <span>Rename the server</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="serverName" placeholder="New server name" class="cmd-input">
+                                <button class="cmd-btn warning" data-cmd="renameServer">EXECUTE</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/server icon &lt;url&gt;</code>
+                                <span>Change server icon</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="iconUrl" placeholder="Image URL" class="cmd-input">
+                                <button class="cmd-btn" data-cmd="changeIcon">EXECUTE</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/server lockdown</code>
+                                <span>Lockdown entire server (remove all perms)</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="lockdownServer">LOCKDOWN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channels Tab -->
+            <div class="tab-content" id="channel-tab">
+                <div class="command-group">
+                    <h3><i class="fas fa-hashtag"></i> Channel Destruction</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/channel create &lt;name&gt;</code>
+                                <span>Create new channel</span>
+                            </div>
+                            <div class="cmd-input-group two-inputs">
+                                <input type="text" id="channelName" placeholder="Channel name" class="cmd-input">
+                                <select id="channelType" class="cmd-input">
+                                    <option value="text">Text Channel</option>
+                                    <option value="voice">Voice Channel</option>
+                                    <option value="category">Category</option>
+                                </select>
+                                <button class="cmd-btn" data-cmd="createChannel">CREATE</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/channel delete &lt;id&gt;</code>
+                                <span>Delete channel by ID</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="deleteChannelId" placeholder="Channel ID" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="deleteChannel">DELETE</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/channel spam &lt;amount&gt;</code>
+                                <span>Create massive channels</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="number" id="spamChannelCount" placeholder="Number" value="50" class="cmd-input">
+                                <input type="text" id="spamChannelName" placeholder="Base name" value="spam" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="spamChannels">SPAM CREATE</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/channel deleteall</code>
+                                <span>Delete ALL channels in server</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="deleteAllChannels">DELETE ALL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Roles Tab -->
+            <div class="tab-content" id="role-tab">
+                <div class="command-group">
+                    <h3><i class="fas fa-tag"></i> Role Manipulation</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/role create &lt;name&gt;</code>
+                                <span>Create new role</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="roleName" placeholder="Role name" class="cmd-input">
+                                <button class="cmd-btn" data-cmd="createRole">CREATE</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/role rename &lt;id&gt; &lt;name&gt;</code>
+                                <span>Rename role</span>
+                            </div>
+                            <div class="cmd-input-group two-inputs">
+                                <input type="text" id="renameRoleId" placeholder="Role ID" class="cmd-input">
+                                <input type="text" id="newRoleName" placeholder="New name" class="cmd-input">
+                                <button class="cmd-btn warning" data-cmd="renameRole">RENAME</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/role giveall &lt;roleId&gt;</code>
+                                <span>Give role to ALL members</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="giveAllRoleId" placeholder="Role ID" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="giveRoleToAll">GIVE TO ALL</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/role deleteall</code>
+                                <span>Delete all roles except @everyone</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="deleteAllRoles">NUKE ROLES</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Members Tab -->
+            <div class="tab-content" id="member-tab">
+                <div class="command-group">
+                    <h3><i class="fas fa-user-slash"></i> Member Control</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/member kick &lt;id&gt;</code>
+                                <span>Kick member by ID</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="kickUserId" placeholder="User ID" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="kickMember">KICK</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/member ban &lt;id&gt;</code>
+                                <span>Ban member by ID</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="banUserId" placeholder="User ID" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="banMember">BAN</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/member kickall</code>
+                                <span>Kick ALL members (except bot owner)</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="kickAll">KICK ALL</button>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/member banall</code>
+                                <span>Ban ALL members</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="banAll">BAN ALL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spam Tab -->
+            <div class="tab-content" id="spam-tab">
+                <div class="command-group">
+                    <h3><i class="fas fa-comment-dots"></i> Spam & Flood</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/spam message &lt;text&gt; &lt;count&gt;</code>
+                                <span>Spam messages in current channel</span>
+                            </div>
+                            <div class="cmd-input-group two-inputs">
+                                <input type="text" id="spamText" placeholder="Message to spam" class="cmd-input">
+                                <input type="number" id="spamCount" placeholder="Count" value="100" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="spamMessage">SPAM</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/spam dm &lt;userId&gt; &lt;text&gt; &lt;count&gt;</code>
+                                <span>Spam DM to user</span>
+                            </div>
+                            <div class="cmd-input-group three-inputs">
+                                <input type="text" id="dmUserId" placeholder="User ID" class="cmd-input">
+                                <input type="text" id="dmText" placeholder="Message" class="cmd-input">
+                                <input type="number" id="dmCount" placeholder="Count" value="50" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="spamDM">SPAM DM</button>
+                            </div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-info">
+                                <code>/spam webhook &lt;name&gt; &lt;text&gt; &lt;count&gt;</code>
+                                <span>Create webhook and spam</span>
+                            </div>
+                            <div class="cmd-input-group">
+                                <input type="text" id="webhookName" placeholder="Webhook name" value="Spammer" class="cmd-input">
+                                <input type="text" id="webhookText" placeholder="Message" class="cmd-input">
+                                <input type="number" id="webhookCount" placeholder="Count" value="100" class="cmd-input">
+                                <button class="cmd-btn danger" data-cmd="webhookSpam">WEBHOOK SPAM</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nuke Tab -->
+            <div class="tab-content" id="nuke-tab">
+                <div class="command-group">
+                    <h3><i class="fas fa-bomb"></i> NUCLEAR OPTIONS</h3>
+                    <div class="command-list">
+                        <div class="command-item nuke-item">
+                            <div class="command-info">
+                                <code>/nuke full</code>
+                                <span class="nuke-warning">⚠️ DESTROY EVERYTHING - CANNOT UNDO ⚠️</span>
+                                <span>Delete all channels, roles, kick all members, rename server</span>
+                            </div>
+                            <button class="cmd-btn nuke" data-cmd="fullNuke">💀 FULL NUKE 💀</button>
+                        </div>
+                        <div class="command-item nuke-item">
+                            <div class="command-info">
+                                <code>/nuke soft</code>
+                                <span>Delete all channels + spam create 500 channels</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="softNuke">SOFT NUKE</button>
+                        </div>
+                        <div class="command-item nuke-item">
+                            <div class="command-info">
+                                <code>/nuke roles+channels</code>
+                                <span>Delete all roles AND all channels</span>
+                            </div>
+                            <button class="cmd-btn danger" data-cmd="nukeRolesChannels">DELETE ROLES + CHANNELS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- console log -->
+        <div class="card console-card" id="consolePanel" style="display: none;">
+            <div class="card-header">
+                <i class="fas fa-terminal"></i> CONSOLE LOG
+                <button id="clearConsole" class="btn-small"><i class="fas fa-trash"></i> CLEAR</button>
+            </div>
+            <div class="console-content" id="consoleLog">
+                <div class="log-entry info">[SYSTEM] Ready for destruction...</div>
+                <div class="log-entry info">[SYSTEM] Enter bot token to initialize</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
