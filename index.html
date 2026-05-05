@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💀 Discord Destroyer Panel 💀</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="bg"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">💀 DISCORD SERVER DESTROYER 💀</h1>
+            <p class="subtitle">التحكم الكامل في البوت | تخريب السيرفرات</p>
+        </div>
+
+        <!-- قسم التوكن -->
+        <div class="card token-card">
+            <div class="card-title"><i class="fas fa-key"></i> TOKEN BOT</div>
+            <input type="password" id="botToken" placeholder="أدخل توكن البوت هنا" class="input">
+            <div class="guild-select" id="guildSelect" style="display:none;">
+                <label><i class="fas fa-server"></i> اختر السيرفر المستهدف:</label>
+                <select id="guildList" class="input"></select>
+            </div>
+            <button id="connectBtn" class="btn btn-primary">🔌 تشغيل البوت</button>
+            <div id="status" class="status"></div>
+        </div>
+
+        <!-- إحصائيات -->
+        <div class="stats" id="stats" style="display:none;">
+            <div class="stat"><i class="fas fa-robot"></i> <span id="botName">-</span></div>
+            <div class="stat"><i class="fas fa-users"></i> <span id="memberCount">0</span> عضو</div>
+            <div class="stat"><i class="fas fa-hashtag"></i> <span id="channelCount">0</span> قناة</div>
+            <div class="stat"><i class="fas fa-tag"></i> <span id="roleCount">0</span> رتبة</div>
+        </div>
+
+        <!-- الأوامر -->
+        <div class="card" id="commands" style="display:none;">
+            <div class="card-title"><i class="fas fa-terminal"></i> أوامر التخريب</div>
+            
+            <div class="section">
+                <h3><i class="fas fa-crown"></i> أوامر السيرفر</h3>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/delete</code> حذف السيرفر بالكامل</div>
+                    <button class="btn-danger" onclick="execCmd('deleteServer')">⚠️ حذف السيرفر</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/rename &lt;الاسم&gt;</code> تغيير اسم السيرفر</div>
+                    <input type="text" id="newName" placeholder="الاسم الجديد" class="input-small">
+                    <button onclick="execCmd('renameServer', document.getElementById('newName').value)">تغيير</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/lockdown</code> قفل السيرفر (منع الجميع من الكلام)</div>
+                    <button class="btn-warning" onclick="execCmd('lockdown')">🔒 قفل</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-hashtag"></i> أوامر القنوات</h3>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/channel create &lt;الاسم&gt;</code> إنشاء قناة جديدة</div>
+                    <input type="text" id="chName" placeholder="اسم القناة" class="input-small">
+                    <button onclick="execCmd('createChannel', document.getElementById('chName').value)">إنشاء</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/channel delete &lt;الرقم&gt;</code> حذف قناة</div>
+                    <input type="text" id="delChId" placeholder="رقم القناة" class="input-small">
+                    <button class="btn-danger" onclick="execCmd('deleteChannel', document.getElementById('delChId').value)">حذف</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/channel spam &lt;العدد&gt; &lt;الاسم&gt;</code> عمل سبام قنوات</div>
+                    <input type="number" id="spamCount" placeholder="العدد" value="50" class="input-small">
+                    <input type="text" id="spamName" placeholder="اسم القناة" value="spam" class="input-small">
+                    <button class="btn-danger" onclick="execCmd('spamChannels', {count:document.getElementById('spamCount').value, name:document.getElementById('spamName').value})">💥 سبام قنوات</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/channel deleteall</code> حذف كل القنوات</div>
+                    <button class="btn-danger" onclick="execCmd('deleteAllChannels')">🔥 حذف الكل</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-tag"></i> أوامر الرتب</h3>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/role create &lt;الاسم&gt;</code> إنشاء رتبة جديدة</div>
+                    <input type="text" id="roleName" placeholder="اسم الرتبة" class="input-small">
+                    <button onclick="execCmd('createRole', document.getElementById('roleName').value)">إنشاء</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/role giveall &lt;رقم الرتبة&gt;</code> إعطاء رتبة للجميع</div>
+                    <input type="text" id="giveRoleId" placeholder="رقم الرتبة" class="input-small">
+                    <button class="btn-warning" onclick="execCmd('giveRoleToAll', document.getElementById('giveRoleId').value)">إعطاء للكل</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/role deleteall</code> حذف كل الرتب</div>
+                    <button class="btn-danger" onclick="execCmd('deleteAllRoles')">🗑️ حذف الرتب</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-user-slash"></i> أوامر الأعضاء</h3>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/kick &lt;الرقم&gt;</code> طرد عضو</div>
+                    <input type="text" id="kickId" placeholder="رقم العضو" class="input-small">
+                    <button class="btn-danger" onclick="execCmd('kickMember', document.getElementById('kickId').value)">طرد</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/ban &lt;الرقم&gt;</code> حظر عضو</div>
+                    <input type="text" id="banId" placeholder="رقم العضو" class="input-small">
+                    <button class="btn-danger" onclick="execCmd('banMember', document.getElementById('banId').value)">حظر</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/kickall</code> طرد كل الأعضاء</div>
+                    <button class="btn-danger" onclick="execCmd('kickAll')">🚪 طرد الكل</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/banall</code> حظر كل الأعضاء</div>
+                    <button class="btn-danger" onclick="execCmd('banAll')">🔨 حظر الكل</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-comment-dots"></i> أوامر السبام</h3>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/spam &lt;نص&gt; &lt;عدد&gt;</code> سبام رسائل</div>
+                    <input type="text" id="spamMsg" placeholder="الرسالة" class="input-small">
+                    <input type="number" id="spamMsgCount" placeholder="العدد" value="100" class="input-small">
+                    <button class="btn-danger" onclick="execCmd('spamMessage', {text:document.getElementById('spamMsg').value, count:document.getElementById('spamMsgCount').value})">💬 سبام</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/spamdm &lt;رقم&gt; &lt;نص&gt; &lt;عدد&gt;</code> سبام خاص</div>
+                    <input type="text" id="dmUserId" placeholder="رقم العضو" class="input-small">
+                    <input type="text" id="dmText" placeholder="الرسالة" class="input-small">
+                    <input type="number" id="dmCount" placeholder="العدد" value="50" class="input-small">
+                    <button class="btn-danger" onclick="execCmd('spamDM', {userId:document.getElementById('dmUserId').value, text:document.getElementById('dmText').value, count:document.getElementById('dmCount').value})">✉️ سبام خاص</button>
+                </div>
+            </div>
+
+            <div class="section nuke-section">
+                <h3><i class="fas fa-bomb"></i> الأسلحة النووية</h3>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/nuke</code> 💀 تفجير كامل للسيرفر 💀</div>
+                    <button class="btn-nuke" onclick="execCmd('fullNuke')">💀 NUKE NOW 💀</button>
+                </div>
+                <div class="cmd">
+                    <div class="cmd-info"><code>/nuke soft</code> تفجير خفيف (مسح القنوات + سبام)</div>
+                    <button class="btn-danger" onclick="execCmd('softNuke')">تفجير خفيف</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- سجل العمليات -->
+        <div class="card" id="logCard" style="display:none;">
+            <div class="card-title"><i class="fas fa-list"></i> سجل العمليات</div>
+            <div class="log" id="log"></div>
+            <button onclick="clearLog()" class="btn-small">مسح السجل</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
